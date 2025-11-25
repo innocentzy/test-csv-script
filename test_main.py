@@ -3,30 +3,7 @@ import csv
 from unittest.mock import patch
 import sys
 import argparse
-
-def process_files(files):
-    data = {}
-    for file in files:
-        with open(file, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                if row['position'] not in data:
-                    data[row['position']] = {}
-                    data[row['position']]['count'] = 1
-                    data[row['position']]['performance'] = float(row['performance'])
-                else:
-                    data[row['position']]['count'] += 1
-                    data[row['position']]['performance'] += float(row['performance'])
-    
-    return data
- 
-def prepare_table_data(data):
-    table_data = []
-    for id, (position, values) in enumerate(sorted(data.items(), key=lambda x: x[1]['performance'] / x[1]['count'], reverse=True), start=1):
-        avg_performance = values['performance'] / values['count']
-        table_data.append([id, position, f"{avg_performance:.2f}"])
-
-    return table_data
+from main import process_files, prepare_table_data
 
 @pytest.fixture
 def sample_csv_file():
@@ -84,6 +61,15 @@ def test_average_calculation(multiple_csv_files):
 def test_file_not_found():
     with pytest.raises(FileNotFoundError):
         process_files(['filenotfound.csv'])
+
+def test_prepare_table_data_sorting(multiple_csv_files):
+    data = process_files(multiple_csv_files)
+    table_data = prepare_table_data(data)
+    
+    assert table_data[0][1] == 'Backend Developer'
+    assert table_data[0][2] == '4.80'
+    assert table_data[1][1] == 'Frontend Developer'
+    assert table_data[1][2] == '4.60'
 
 def test_argument_parsing_single_file():
     test_args = ['main.py', '--files', 'test.csv']
