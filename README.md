@@ -1,11 +1,11 @@
-## Скрипт для анализа эффективности работы разработчиков	
+# Скрипт для анализа эффективности работы разработчиков	
 
-#### Установка зависимостей
+## Установка зависимостей
 ```bash
 pip install -r requirements.txt
 ```
 
-#### Использование
+## Использование
 ```bash
 # Один файл
 python main.py --files data.csv
@@ -17,12 +17,12 @@ python main.py --files data1.csv data2.csv data3.csv
 python main.py --files data.csv --report performance
 ```
 
-#### Запуск тестов
+## Запуск тестов
 ```bash
 pytest test_main.py
 ```
 
-#### Пример запуска скрипта
+## Пример запуска скрипта
 <picture>
   <img alt="Example picture" src="example.png?raw=true">
 </picture>
